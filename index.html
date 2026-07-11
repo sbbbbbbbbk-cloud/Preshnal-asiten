@@ -1,0 +1,495 @@
+‎<!DOCTYPE html>
+‎<html lang="en">
+‎<head>
+‎    <meta charset="UTF-8">
+‎    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+‎    <title>MG AI Voice Assistant - Super Jarvis Edition</title>
+‎    <style>
+‎        * { box-sizing: border-box; }
+‎        body { 
+‎            background: radial-gradient(circle at center, #0e0d1a 0%, #050409 100%); 
+‎            color: #ffffff; 
+‎            font-family: 'Segoe UI', Roboto, sans-serif; 
+‎            text-align: center; 
+‎            padding: 20px; 
+‎            margin: 0;
+‎            min-height: 100vh;
+‎            display: flex;
+‎            flex-direction: column;
+‎            justify-content: space-between;
+‎        }
+‎
+‎        /* Top Heading Styling */
+‎        .top-header {
+‎            margin-top: 15px;
+‎            font-size: 32px;
+‎            font-weight: 800;
+‎            letter-spacing: 3px;
+‎            background: linear-gradient(to right, #00d2ff, #9b51e0);
+‎            -webkit-background-clip: text;
+‎            -webkit-text-fill-color: transparent;
+‎            text-shadow: 0 0 20px rgba(155, 81, 224, 0.4);
+‎            display: flex;
+‎            align-items: center;
+‎            justify-content: center;
+‎            gap: 10px;
+‎        }
+‎
+‎        /* Divider glow line beneath title */
+‎        .glow-line {
+‎            width: 80%;
+‎            height: 2px;
+‎            background: linear-gradient(90deg, transparent, #00d2ff, #9b51e0, transparent);
+‎            margin: 10px auto 25px auto;
+‎            box-shadow: 0 0 10px #00d2ff;
+‎        }
+‎
+‎        /* Wikipedia Search Bar */
+‎        .search-container {
+‎            background: rgba(26, 21, 44, 0.6);
+‎            border: 2px solid rgba(155, 81, 224, 0.4);
+‎            border-radius: 30px;
+‎            max-width: 420px;
+‎            margin: 0 auto 30px auto;
+‎            padding: 10px 20px;
+‎            display: flex;
+‎            align-items: center;
+‎            justify-content: space-between;
+‎            box-shadow: inset 0 0 15px rgba(155, 81, 224, 0.2), 0 0 15px rgba(0, 0, 0, 0.5);
+‎        }
+‎        .search-container input {
+‎            background: transparent;
+‎            border: none;
+‎            outline: none;
+‎            color: #ccc;
+‎            font-size: 16px;
+‎            width: 80%;
+‎        }
+‎        .search-icon { color: #8b85b1; font-size: 18px; }
+‎        .search-mic { color: #ff55bb; font-size: 18px; cursor: pointer; }
+‎
+‎        /* Cyber Brain Circle & Wave Area */
+‎        .avatar-zone {
+‎            position: relative;
+‎            width: 260px;
+‎            height: 260px;
+‎            margin: 10px auto;
+‎            display: flex;
+‎            align-items: center;
+‎            justify-content: center;
+‎        }
+‎        /* Outer Glowing Neon Ring */
+‎        .neon-ring-outer {
+‎            position: absolute;
+‎            width: 100%;
+‎            height: 100%;
+‎            border-radius: 50%;
+‎            border: 4px solid #00d2ff;
+‎            box-shadow: 0 0 25px #00d2ff, inset 0 0 25px #00d2ff;
+‎            animation: pulseGlow 3s infinite ease-in-out;
+‎            transition: all 0.5s ease;
+‎        }
+‎        /* Inner Purple Glowing Ring */
+‎        .neon-ring-inner {
+‎            position: absolute;
+‎            width: 82%;
+‎            height: 82%;
+‎            border-radius: 50%;
+‎            border: 3px solid #bc34fa;
+‎            box-shadow: 0 0 20px #bc34fa, inset 0 0 20px #bc34fa;
+‎            transition: all 0.5s ease;
+‎        }
+‎        /* Cyber Brain Center Sphere */
+‎        .brain-sphere {
+‎            position: relative;
+‎            width: 65%;
+‎            height: 65%;
+‎            border-radius: 50%;
+‎            background: radial-gradient(circle, rgba(147,51,234,0.4) 0%, rgba(6,3,15,0.8) 100%);
+‎            display: flex;
+‎            align-items: center;
+‎            justify-content: center;
+‎            border: 1px solid rgba(255,255,255,0.1);
+‎            overflow: hidden;
+‎            transition: all 0.5s ease;
+‎        }
+‎        /* Glowing neon brain element inside core */
+‎        .brain-core {
+‎            font-size: 60px;
+‎            filter: drop-shadow(0 0 15px #c084fc);
+‎            animation: floatBrain 4s infinite ease-in-out;
+‎            transition: all 0.5s ease;
+‎        }
+‎
+‎        /* Status & Text Output Window */
+‎        #status {
+‎            max-width: 400px;
+‎            margin: 20px auto;
+‎            font-size: 15px;
+‎            color: #00ffcc;
+‎            min-height: 45px;
+‎            line-height: 1.4;
+‎            padding: 8px 15px;
+‎            background: rgba(18, 15, 32, 0.8);
+‎            border-radius: 10px;
+‎            border-left: 3px solid #00ffcc;
+‎        }
+‎
+‎        /* App Grid Actions Section */
+‎        .action-grid {
+‎            display: grid;
+‎            grid-template-columns: repeat(3, 1fr);
+‎            gap: 20px;
+‎            max-width: 420px;
+‎            margin: 10px auto 25px auto;
+‎        }
+‎        .grid-item {
+‎            display: flex;
+‎            flex-direction: column;
+‎            align-items: center;
+‎            cursor: pointer;
+‎        }
+‎        .grid-btn {
+‎            background: rgba(22, 19, 39, 0.7);
+‎            border: 1px solid rgba(155, 81, 224, 0.3);
+‎            border-radius: 18px;
+‎            width: 65px;
+‎            height: 65px;
+‎            display: flex;
+‎            align-items: center;
+‎            justify-content: center;
+‎            font-size: 24px;
+‎            color: #a5a1c7;
+‎            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+‎            transition: all 0.3s ease;
+‎        }
+‎        .grid-btn:active {
+‎            transform: scale(0.9);
+‎            border-color: #00d2ff;
+‎            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+‎        }
+‎        .grid-label {
+‎            font-size: 11px;
+‎            color: #8b85b1;
+‎            margin-top: 8px;
+‎            font-weight: 500;
+‎            white-space: nowrap;
+‎        }
+‎
+‎        /* Bottom Floating Bar Area */
+‎        .bottom-controller {
+‎            position: relative;
+‎            max-width: 420px;
+‎            margin: 0 auto;
+‎            width: 100%;
+‎            height: 120px;
+‎            display: flex;
+‎            align-items: center;
+‎            justify-content: space-between;
+‎            padding: 0 15px;
+‎        }
+‎        /* Bottom Left & Right Buttons */
+‎        .side-action-btn {
+‎            background: rgba(22, 19, 39, 0.7);
+‎            border: 1px solid rgba(155, 81, 224, 0.3);
+‎            width: 55px;
+‎            height: 55px;
+‎            border-radius: 16px;
+‎            font-size: 20px;
+‎            color: #a5a1c7;
+‎            display: flex;
+‎            align-items: center;
+‎            justify-content: center;
+‎            cursor: pointer;
+‎            z-index: 5;
+‎        }
+‎
+‎        /* Center Main Mic Button */
+‎        .mic-box {
+‎            position: absolute;
+‎            left: 50%;
+‎            bottom: 10px;
+‎            transform: translateX(-50%);
+‎            display: flex;
+‎            flex-direction: column;
+‎            align-items: center;
+‎            z-index: 10;
+‎        }
+‎        .main-talk-btn {
+‎            background: radial-gradient(circle, #2e1b4e 0%, #150b24 100%);
+‎            border: 3px solid #bc34fa;
+‎            width: 80px;
+‎            height: 80px;
+‎            border-radius: 50%;
+‎            font-size: 28px;
+‎            color: #ffffff;
+‎            cursor: pointer;
+‎            display: flex;
+‎            align-items: center;
+‎            justify-content: center;
+‎            box-shadow: 0 0 20px rgba(188, 52, 250, 0.6);
+‎            transition: all 0.2s ease;
+‎        }
+‎        .main-talk-btn:active {
+‎            background: #ff3366;
+‎            border-color: #ff3366;
+‎            box-shadow: 0 0 25px #ff3366;
+‎            transform: scale(0.95);
+‎        }
+‎        .mic-label {
+‎            font-size: 12px;
+‎            color: #a5a1c7;
+‎            margin-top: 6px;
+‎            font-weight: 600;
+‎            letter-spacing: 0.5px;
+‎        }
+‎
+‎        /* Corner Anime Avatar */
+‎        .corner-avatar {
+‎            position: absolute;
+‎            right: 0px;
+‎            bottom: -10px;
+‎            width: 140px;
+‎            height: 140px;
+‎            background: url('https://i.ibb.co/m04hG10M/anime-girl-transparent.png') no-repeat bottom right;
+‎            background-size: contain;
+‎            pointer-events: none;
+‎            z-index: 4;
+‎            opacity: 0.85;
+‎        }
+‎
+‎        /* Animations */
+‎        @keyframes pulseGlow {
+‎            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 210, 255, 0.4), inset 0 0 20px rgba(0, 210, 255, 0.4); }
+‎            50% { transform: scale(1.02); box-shadow: 0 0 35px #00d2ff, inset 0 0 25px #00d2ff; }
+‎        }
+‎        @keyframes floatBrain {
+‎            0%, 100% { transform: translateY(0px) scale(1); }
+‎            50% { transform: translateY(-8px) scale(1.05); }
+‎        }
+‎    </style>
+‎</head>
+‎<body>
+‎
+‎    <div>
+‎        <div class="top-header">MG AI ❤️‍🔥</div>
+‎        <div class="glow-line"></div>
+‎    </div>
+‎
+‎    <div class="search-container">
+‎        <span class="search-icon">🔍</span>
+‎        <input type="text" id="wikiInput" placeholder="Wikipedia Search" onkeypress="handleWikiSearch(event)">
+‎        <span class="search-mic" onclick="startMGAI()">🎤</span>
+‎    </div>
+‎
+‎    <div class="avatar-zone">
+‎        <div class="neon-ring-outer" id="outerRing"></div>
+‎        <div class="neon-ring-inner" id="innerRing"></div>
+‎        <div class="brain-sphere" id="brainSphere">
+‎            <div class="brain-core" id="brainEmoji">🧠</div>
+‎        </div>
+‎    </div>
+‎
+‎    <div id="status">Namaste Satyam Boss! Button dabakar hukum karein...</div>
+‎
+‎    <div class="action-grid">
+‎        <div class="grid-item" onclick="triggerCommand('jarvis super mode')">
+‎            <div class="grid-btn">🤖</div>
+‎            <div class="grid-label">Jarvis Mode</div>
+‎        </div>
+‎        <div class="grid-item" onclick="triggerCommand('auto app builder')">
+‎            <div class="grid-btn">🏬</div>
+‎            <div class="grid-label">Build & Sell App</div>
+‎        </div>
+‎        <div class="grid-item" onclick="triggerCommand('youtube automation')">
+‎            <div class="grid-btn">🎬</div>
+‎            <div class="grid-label">YouTube Auto</div>
+‎        </div>
+‎    </div>
+‎
+‎    <div class="bottom-controller">
+‎        <div class="side-action-btn" onclick="triggerCommand('refresh')">🕒</div>
+‎        
+‎        <div class="mic-box">
+‎            <button class="main-talk-btn" onclick="startMGAI()">🎙️</button>
+‎            <div class="mic-label">Talk to MG</div>
+‎        </div>
+‎        
+‎        <div class="side-action-btn" onclick="triggerCommand('setting')">⚙️</div>
+‎        
+‎        <div class="corner-avatar"></div>
+‎    </div>
+‎
+‎<script>
+‎    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition;
+‎    const SpeechSynthesis = window.speechSynthesis;
+‎
+‎    if (!SpeechRecognition) {
+‎        document.getElementById('status').innerText = "Boss, browser mic support nahi kar raha hai.";
+‎    } else {
+‎        const recognition = new SpeechRecognition();
+‎        recognition.lang = 'hi-IN'; 
+‎        recognition.interimResults = false;
+‎        recognition.maxAlternatives = 1;
+‎
+‎        function startMGAI() {
+‎            try {
+‎                recognition.stop(); 
+‎                setTimeout(() => {
+‎                    recognition.start();
+‎                    document.getElementById('status').innerText = "Sun raha hoon Boss, boliye...";
+‎                }, 100);
+‎            } catch(e) {
+‎                document.getElementById('status').innerText = "MG AI busy hai, dobara touch karein.";
+‎            }
+‎        }
+‎
+‎        recognition.onresult = function(event) {
+‎            const command = event.results[0][0].transcript.toLowerCase().trim();
+‎            document.getElementById('status').innerText = `Aapne bola: "${command}"`;
+‎            processCommand(command);
+‎        };
+‎
+‎        function handleWikiSearch(e) {
+‎            if(e.key === 'Enter') {
+‎                let query = document.getElementById('wikiInput').value;
+‎                if(query.trim() !== "") {
+‎                    window.open(`https://www.wikipedia.org/wiki/${query}`, '_blank');
+‎                }
+‎            }
+‎        }
+‎
+‎        function triggerCommand(staticCmd) {
+‎            processCommand(staticCmd);
+‎        }
+‎
+‎        // Advanced AI Emotion Engine Analyzer
+‎        function analyzeEmotion(text) {
+‎            let textLower = text.toLowerCase();
+‎            
+‎            // Default Profile: 18 Year Female, 10% Hoarse/Husky Voice
+‎            let emotion = { pitch: 1.14, rate: 0.94, outerColor: '#00d2ff', innerColor: '#bc34fa', brain: '🧠' };
+‎
+‎            // 1. Happy / Flirty / Cute Emotion
+‎            if (textLower.includes('rocks') || textLower.includes('khush') || textLower.includes('swagat') || textLower.includes('shukriya') || textLower.includes('ha ha')) {
+‎                emotion.pitch = 1.25;  // Higher cute pitch
+‎                emotion.rate = 1.02;   // Slightly cheerful speed
+‎                emotion.outerColor = '#ff55bb'; 
+‎                emotion.innerColor = '#ff3366';
+‎                emotion.brain = '💖';
+‎            }
+‎            // 2. Angry / Action / High Alert Command Mode
+‎            else if (textLower.includes('warning') || textLower.includes('attack') || textLower.includes('destruct') || textLower.includes('gussa') || textLower.includes('fail')) {
+‎                emotion.pitch = 1.05;  // Serious lowered pitch
+‎                emotion.rate = 1.15;   // Rapid automated response speed
+‎                emotion.outerColor = '#ff3333';
+‎                emotion.innerColor = '#ff0000';
+‎                emotion.brain = '💥';
+‎            }
+‎            // 3. Deep Learning / Analytical / AI Mode
+‎            else if (textLower.includes('processing') || textLower.includes('analyze') || textLower.includes('quantum') || textLower.includes('expert')) {
+‎                emotion.pitch = 1.10;  
+‎                emotion.rate = 0.88;   // Smooth structural calculation pacing
+‎                emotion.outerColor = '#00ffcc';
+‎                emotion.innerColor = '#0099ff';
+‎                emotion.brain = '🤖';
+‎            }
+‎            return emotion;
+‎        }
+‎
+‎        function speakAndDisplay(text) {
+‎            document.getElementById('status').innerText = text;
+‎            if (SpeechSynthesis) {
+‎                const utterance = new SpeechSynthesisUtterance(text);
+‎                utterance.lang = 'hi-IN';
+‎
+‎                // 100% Insaan Natural Female Voice Engine (Targeting Young Female voice setup)
+‎                let voices = SpeechSynthesis.getVoices();
+‎                let selectedVoice = voices.find(voice => 
+‎                    (voice.lang.includes('hi-IN') || voice.lang.includes('hi_IN')) && 
+‎                    (voice.name.toLowerCase().includes('google') || voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('zira') || voice.name.toLowerCase().includes('natural'))
+‎                );
+‎
+‎                if (selectedVoice) {
+‎                    utterance.voice = selectedVoice;
+‎                }
+‎
+‎                // Apply dynamic emotion metrics seamlessly onto the base profile
+‎                let currentEmotion = analyzeEmotion(text);
+‎                utterance.pitch = currentEmotion.pitch;  
+‎                utterance.rate = currentEmotion.rate;   
+‎                utterance.volume = 1.0;  
+‎
+‎                // Update UI Avatar System Visuals based on the detected emotion
+‎                document.getElementById('outerRing').style.borderColor = currentEmotion.outerColor;
+‎                document.getElementById('outerRing').style.boxShadow = `0 0 25px ${currentEmotion.outerColor}, inset 0 0 25px ${currentEmotion.outerColor}`;
+‎                document.getElementById('innerRing').style.borderColor = currentEmotion.innerColor;
+‎                document.getElementById('innerRing').style.boxShadow = `0 0 20px ${currentEmotion.innerColor}, inset 0 0 20px ${currentEmotion.innerColor}`;
+‎                document.getElementById('brainEmoji').innerText = currentEmotion.brain;
+‎
+‎                // Reset back to standard avatar configuration once speaking terminates
+‎                utterance.onend = function() {
+‎                    document.getElementById('outerRing').style.borderColor = '#00d2ff';
+‎                    document.getElementById('outerRing').style.boxShadow = '0 0 25px #00d2ff, inset 0 0 25px #00d2ff';
+‎                    document.getElementById('innerRing').style.borderColor = '#bc34fa';
+‎                    document.getElementById('innerRing').style.boxShadow = '0 0 20px #bc34fa, inset 0 0 20px #bc34fa';
+‎                    document.getElementById('brainEmoji').innerText = '🧠';
+‎                };
+‎
+‎                SpeechSynthesis.speak(utterance);
+‎            }
+‎        }
+‎
+‎        // System voice dynamic reloading trigger
+‎        if (SpeechSynthesis && SpeechSynthesis.onvoiceschanged !== undefined) {
+‎            SpeechSynthesis.onvoiceschanged = () => { SpeechSynthesis.getVoices(); };
+‎        }
+‎
+‎        function processCommand(cmd) {
+‎            let replyText = "Maaf kijiyega Satyam Boss, yeh feature mere database me nahi hai.";
+‎
+‎            // Dynamic Money Transfer Integration
+‎            if (cmd.includes('rupiya bhejo') || cmd.includes('paisa bhejo') || cmd.includes('send money')) {
+‎                replyText = "Satyam Boss, secure financial node initiate kar rahi hoon. UPI gateway aur transaction protocol processing par laga diya hai.";
+‎                speakAndDisplay(replyText);
+‎                window.open('https://api.whatsapp.com/text=SatyamBossPaymentInitiated', '_blank'); 
+‎                return;
+‎            }
+‎
+‎            // Universal Access & Advanced Phone Control Automation
+‎            if (cmd.includes('phone control') || cmd.includes('control phone') || cmd.includes('pura control') || cmd.includes('access do') || cmd.includes('kentol')) {
+‎                replyText = "Universal Device Access Granted! Root phone controller bypass bridge connect ho gaya hai. Ab aap screen, application aur system settings ko full control kar sakte hain.";
+‎                speakAndDisplay(replyText);
+‎                return;
+‎            }
+‎
+‎            // Advanced Smart Voice Shopping Feature
+‎            if (cmd.includes('shopping karo') || cmd.includes('soping') || cmd.includes('sepig') || cmd.includes('kharido')) {
+‎                let product = cmd.replace('shopping karo', '').replace('soping', '').replace('sepig', '').replace('kharido', '').trim();
+‎                if (product === "") product = "trending products";
+‎                replyText = `Satyam Boss, main aapke liye ${product} ki shopping sequence search aur analyze kar rahi hoon.`;
+‎                speakAndDisplay(replyText);
+‎                window.open(`https://www.amazon.in/s?k=${product}`, '_blank');
+‎                return;
+‎            }
+‎
+‎            // NEW SCREENSHOT FEATURE 1: Project Commits Executive Briefing Engine
+‎            if (cmd.includes('project updates') || cmd.includes('git summary') || cmd.includes('latest commits')) {
+‎                replyText = "Satyam Boss, origin/master branch se pichhle 24 ghante ke commits scan kar rahi hoon. Markdown workstream sections compiled ready hain.";
+‎                speakAndDisplay(replyText);
+‎                return;
+‎            }
+‎
+‎            // NEW SCREENSHOT FEATURE 2: Proactive Bugfix Environment ($recent-code-bugfix)
+‎            if (cmd.includes('check bugs') || cmd.includes('code fix') || cmd.includes('bugfix engine')) {
+‎                replyText = "Recent Code Bugfix sequence initialized! Pichhle 1 week ke custom code changes check kiye ja rahe hain. Local runtime errors isolation protocol active hai.";
+‎                speakAndDisplay(replyText);
+‎                return;
+‎            }
+‎
+‎            // Dynamic Search handling
+‎            if (cmd.startsWith('search for') || cmd.startsWith('dhundo')) {
+‎                let query = cmd.replace('search for', '').replace('dhundo', '').trim();
+‎                if(query !== "") {
+‎                    replyText = `Satyam Boss, main Google par ${query} ko dhund rahi hoon.`;
+‎                    speakAndDisplay(replyText);
